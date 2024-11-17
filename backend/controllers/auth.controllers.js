@@ -42,7 +42,7 @@ export const signup = async (req, res) => {
   try {
     const userExists = await User.findOne({ email });
     if (userExists) {
-      res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
     const user = await User.create({ email, password, name });
     const { accessToken, refreshToken } = generateToken(user._id);
@@ -136,11 +136,11 @@ export const refreshToken = async (req, res) => {
   }
 };
 
-// export const getProfile = async (req, res) => {
-//   try {
-//     const user = await User.findById(req.user.userId).select("-password");
-//     res.status(200).json(user);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
+export const getProfile = async (req, res) => {
+  const user = req.user;
+  try {
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

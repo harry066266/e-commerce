@@ -90,8 +90,18 @@ export const checkoutSuccess = async (req, res) => {
         price: product.price,
       })),
       totalAmount: session.amount_total / 100,
+      stripeSessionId: sessionId,
     });
-  } catch (error) {}
+    await newOrder.save();
+    res.status(200).json({
+      success: true,
+      message:
+        "Payment successful ,order created,and coupon deactivated if used",
+      orderId: newOrder._id,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 async function createStripeCoupon(discountPercentage) {
