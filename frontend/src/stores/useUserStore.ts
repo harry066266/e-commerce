@@ -10,12 +10,13 @@ const useUserStore = create<UserStore>()((set) => ({
   checkAuth: async () => {
     set({ checkingAuth: true });
     try {
-      const res = await axios.get("/auth/profile");
-      set({ user: res.data, checkingAuth: false });
+      const response = await axios.get("/auth/profile");
+      set({ user: response.data, checkingAuth: false });
     } catch {
       set({ checkingAuth: false, user: null });
     }
   },
+
   signup: async ({
     name,
     email,
@@ -33,7 +34,7 @@ const useUserStore = create<UserStore>()((set) => ({
         email,
         password,
       });
-      set({ user: res.data, loading: false });
+      set({ user: res.data.user, loading: false });
     } catch (error) {
       // 使用 AxiosError 类型来推断 error 的类型
       if (error instanceof AxiosError) {
@@ -56,7 +57,7 @@ const useUserStore = create<UserStore>()((set) => ({
         email,
         password,
       });
-      set({ user: res.data, loading: false });
+      set({ user: res.data.user, loading: false });
     } catch (error) {
       // 使用 AxiosError 类型来推断 error 的类型
       if (error instanceof AxiosError) {

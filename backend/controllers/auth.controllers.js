@@ -48,7 +48,7 @@ export const signup = async (req, res) => {
     const { accessToken, refreshToken } = generateToken(user._id);
     await storeRefreshToken(user._id, refreshToken);
     setCookies(res, accessToken, refreshToken);
-    res.status(201).json({
+    return res.status(201).json({
       user: {
         _id: user._id,
         name: user.name,
@@ -58,7 +58,7 @@ export const signup = async (req, res) => {
       message: "User created successfully",
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 export const login = async (req, res) => {
@@ -66,16 +66,17 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
-      res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
     const { accessToken, refreshToken } = generateToken(user._id);
     await storeRefreshToken(user._id, refreshToken);
     setCookies(res, accessToken, refreshToken);
-    res.status(200).json({
+
+    return res.status(200).json({
       user: {
         _id: user._id,
         name: user.name,
@@ -85,7 +86,7 @@ export const login = async (req, res) => {
       message: "User logged in successfully",
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 export const logout = async (req, res) => {
@@ -100,9 +101,9 @@ export const logout = async (req, res) => {
     }
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
-    res.status(200).json({ message: "User logged out successfully" });
+    return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -110,12 +111,12 @@ export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
-      res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     const storeToken = await redis.get(`refreshToken:${decoded.userId}`);
     if (storeToken !== refreshToken) {
-      res.status(401).json({ message: "Invalid refresh token" });
+      return res.status(401).json({ message: "Invalid refresh token" });
     }
     const accessToken = jwt.sign(
       { userId: decoded.userId },
@@ -130,17 +131,17 @@ export const refreshToken = async (req, res) => {
       samesite: "strict",
       maxAge: 15 * 60 * 1000,
     });
-    res.status(200).json({ message: "Token refreshed successfully" });
+    return res.status(200).json({ message: "Token refreshed successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
 export const getProfile = async (req, res) => {
   const user = req.user;
   try {
-    res.status(200).json(user);
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
