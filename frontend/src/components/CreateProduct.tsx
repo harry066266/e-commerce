@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Upload, Loader } from "lucide-react";
-
+import useProductStore from "../stores/useProductStore";
 const categories = [
   "jeans",
   "t-shirts",
@@ -19,9 +19,18 @@ const CreateProduct = () => {
     category: "",
     image: "",
   });
+
+  const { createProduct } = useProductStore();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(newProduct);
+    e.preventDefault(); // 阻止表单提交的默认行为（页面刷新）
+    await createProduct(newProduct);
+    setNewProduct({
+      name: "",
+      description: "",
+      price: "",
+      category: "",
+      image: "",
+    });
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

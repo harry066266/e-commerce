@@ -3,7 +3,7 @@ import redis from "../lib/redis.js";
 import cloudinary from "../lib/cloudinary.js";
 export const getAllProducts = async (req, res) => {
   try {
-    const products = awaitProduct.find();
+    const products = await Product.find();
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -30,12 +30,15 @@ export const getFeaturedProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
   try {
     const { name, description, price, image, category } = req.body;
+
     let cloudinaryResponse = null;
+
     if (image) {
       cloudinaryResponse = await cloudinary.uploader.upload(image, {
         folder: "products",
       });
     }
+
     const product = await Product.create({
       name,
       description,
@@ -45,9 +48,12 @@ export const createProduct = async (req, res) => {
         : "",
       category,
     });
+
     res.status(201).json(product);
+    console.log("Product created successfully");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log("Error in createProduct controller", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
 import useUserStore from "../stores/useUserStore";
-
+import { useCartStore } from "../stores/useCartStore";
 const Navbar = () => {
   const { user, logout } = useUserStore();
   const isAdmin = user?.role === "admin";
-  const cart = [1, 2, 3];
+  const { cart } = useCartStore();
 
   return (
     <>
@@ -71,7 +71,7 @@ const Navbar = () => {
 									rounded-md flex items-center transition duration-300 ease-in-out"
                   >
                     <UserPlus className="mr-2" size={18} />
-                    Sign Up
+                    <span className="hidden sm:inline ml-2">Sign Up</span>
                   </Link>
                   <Link
                     to={"/login"}
@@ -79,7 +79,7 @@ const Navbar = () => {
 									rounded-md flex items-center transition duration-300 ease-in-out"
                   >
                     <LogIn className="mr-2" size={18} />
-                    Login
+                    <span className="hidden sm:inline ml-2">Log In</span>
                   </Link>
                 </>
               )}

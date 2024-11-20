@@ -26,23 +26,44 @@ interface Category {
 }
 
 interface Product {
-  name: string; // 产品名称
-  description: string; // 产品描述
-  price: number; // 产品价格
-  category: string; // 产品类别
-  image: string; // 产品图片 URL
-}
-
-interface Product {
+  _id?: string;
   name: string;
   description: string;
   price: string;
   category: string;
-  image: string | null;
+  image: string;
+  isFeatured?: boolean;
+  quantity?: number;
 }
+
 interface ProductStore {
   products: Product[]; // 存储产品的数组
   loading: boolean; // 加载状态
   setProducts: (products: Product[]) => void; // 设置产品列表的方法
   createProduct: (product: Product) => Promise<void>; // 创建产品的方法
+  fetchAllProducts: () => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
+  toggleFeaturedProduct: (id: string) => Promise<void>;
+  fetchProductsByCategory: (category: string) => Promise<void>;
+}
+
+interface CartStore {
+  cart: Product[]; // Cart contains products with a quantity
+  coupon: Coupon | null; // Coupon code, if any
+  total: number; // Total price of cart
+  subtotal: number; // Subtotal before discounts
+  addToCart: (product: Product) => Promise<void>; // Add product to cart
+  removeFromCart: (productId: string) => Promise<void>; // Remove product from cart
+  fetchCart: () => Promise<void>; // Fetch the current cart from the server
+  calculateTotal: () => void;
+}
+
+interface Coupon {
+  code: string; // 优惠码
+  discountPercentage: number; // 折扣百分比
+  expirationDate: Date; // 过期日期
+  isActive?: boolean; // 是否激活，默认值为 true
+  userId: Types.ObjectId; // 关联的用户 ID
+  createdAt?: Date; // 时间戳（由 Mongoose 自动生成）
+  updatedAt?: Date; // 时间戳（由 Mongoose 自动生成）
 }
