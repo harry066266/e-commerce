@@ -13,7 +13,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
       const response = await axios.get("/coupons");
       set({ coupon: response.data });
     } catch (err: unknown) {
-      const error = err as AxiosError; // 明确将 error 断言为 AxiosError
+      const error = err as AxiosError<{ message?: string }>;
       const errorMessage =
         error.response?.data?.message || "Failed to apply coupon";
       toast.error(errorMessage);
@@ -26,7 +26,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
       get().calculateTotal();
       toast.success("Coupon applied successfully");
     } catch (err: unknown) {
-      const error = err as AxiosError; // 明确将 error 断言为 AxiosError
+      const error = err as AxiosError<{ message?: string }>;
       const errorMessage =
         error.response?.data?.message || "Failed to apply coupon";
       toast.error(errorMessage);
