@@ -9,7 +9,6 @@ const LoginPage = () => {
   const { login, loading } = useUserStore();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(email, password);
     login({ email, password });
   };
   return (

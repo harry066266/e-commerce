@@ -33,9 +33,10 @@ function getDatesInRange(startDate, endDate) {
     dates.push(currentDate.toISOString().split("T")[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
+  return dates;
 }
 
-export const getDaliySalesData = async (startDate, endDate) => {
+export const getDailySalesData = async (startDate, endDate) => {
   try {
     const dailySales = await Order.aggregate([
       {
@@ -54,7 +55,7 @@ export const getDaliySalesData = async (startDate, endDate) => {
     const dateArray = getDatesInRange(startDate, endDate);
 
     return dateArray.map((date) => {
-      const foundData = dailySalesData.find((item) => item._id === date);
+      const foundData = dailySales.find((item) => item._id === date);
 
       return {
         date,
@@ -63,6 +64,6 @@ export const getDaliySalesData = async (startDate, endDate) => {
       };
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    throw new Error(error.message);
   }
 };

@@ -14,16 +14,16 @@ export const getFeaturedProducts = async (req, res) => {
   try {
     let featuredProducts = await redis.get("featuredProducts");
     if (featuredProducts) {
-      res.status(200).json(JSON.parse(featuredProducts));
+      return res.status(200).json(JSON.parse(featuredProducts));
     }
     featuredProducts = await Product.find({ isFeatured: true }).lean();
     if (!featuredProducts) {
-      res.status(404).json({ message: "No featured products found" });
+      return res.status(404).json({ message: "No featured products found" });
     }
     await redis.set("featuredProducts", JSON.stringify(featuredProducts));
-    res.status(200).json(featuredProducts);
+    return res.status(200).json(featuredProducts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -83,9 +83,21 @@ export const deleteProduct = async (req, res) => {
 export const getrecommendedProducts = async (req, res) => {
   try {
     const products = await Product.aggregate([
-      $sample({ size: 4 }),
-      $project({ name: 1, image: 1, _id: 1, price: 1, description: 1 }),
+      {
+        $sample: { size: 4 },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          image: 1,
+          price: 1,
+        },
+      },
     ]);
+
+    res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

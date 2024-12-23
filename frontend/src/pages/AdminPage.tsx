@@ -17,7 +17,7 @@ const AdminPage = () => {
     fetchAllProducts();
   }, [fetchAllProducts]);
   return (
-    <div className="min-h-full bg-gray-900 text-white relative overlow-hidden">
+    <div className="min-h-full relative overlow-hidden">
       <div className="relative z-10 container mx-auto px-4 py-16">
         <motion.h1
           className="text-4xl font-bold mb-4 text-emerald-400 text-center"

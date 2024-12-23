@@ -17,6 +17,7 @@ interface UserStore {
   signup: (data: UsersignupType) => Promise<string | undefined>; // 注册方法
   login: (data: UserloginType) => Promise<string | undefined>; // 登录方法
   logout: () => Promise<void>; // 注销方法
+  refreshToken: () => Promise<void>; // 刷新令牌
 }
 
 interface Category {
@@ -45,6 +46,7 @@ interface ProductStore {
   deleteProduct: (id: string) => Promise<void>;
   toggleFeaturedProduct: (id: string) => Promise<void>;
   fetchProductsByCategory: (category: string) => Promise<void>;
+  fetchFeaturedProducts: () => Promise<void>;
 }
 
 interface CartStore {
@@ -52,10 +54,16 @@ interface CartStore {
   coupon: Coupon | null; // Coupon code, if any
   total: number; // Total price of cart
   subtotal: number; // Subtotal before discounts
+  isCouponApplied: boolean;
   addToCart: (product: Product) => Promise<void>; // Add product to cart
   removeFromCart: (productId: string) => Promise<void>; // Remove product from cart
   fetchCart: () => Promise<void>; // Fetch the current cart from the server
   calculateTotal: () => void;
+  updateQuantity: (productId: string, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
+  getMyCoupon: () => Promise<void>;
+  applyCoupon: (couponCode: string) => Promise<void>;
+  removeCoupon: () => void;
 }
 
 interface Coupon {
