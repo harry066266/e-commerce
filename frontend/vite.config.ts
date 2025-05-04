@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
+
     proxy: {
       "/api": {
         target: "http://localhost:5000", // 你的后端服务器地址
@@ -13,5 +14,8 @@ export default defineConfig({
         secure: false, // 如果后端使用的是http而不是https，可以设置为false
       },
     },
+  },
+  preview: {
+    port: 3000, // 预览时也使用3000端口
   },
 });

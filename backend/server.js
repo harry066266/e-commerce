@@ -24,12 +24,12 @@ app.use(
     credentials: true, // Allow credentials (cookies) to be sent
   })
 );
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/coupons", couponRoutes);
-app.use("/api/payments", paymentRoutes);
-app.use("/api/analytics", analyticsRoutes);
+app.use("/auth", authRoutes);
+app.use("/products", productRoutes);
+app.use("/cart", cartRoutes);
+app.use("/coupons", couponRoutes);
+app.use("/payments", paymentRoutes);
+app.use("/analytics", analyticsRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
