@@ -28,8 +28,10 @@ A full-featured e-commerce web application built with the MERN stack, supporting
 
 ```bash
 # Clone the repository
-git clone https://github.com/harry066266/portfolio.git
-cd portfolio
+git clone https://github.com/harry066266/e-commerce.git
 
-# Install dependencies
-npm install
+# build and run 
+npm run build
+npm start
+cd frontend
+npm run preview
